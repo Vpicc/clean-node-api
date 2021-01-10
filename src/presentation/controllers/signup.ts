@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 import { badRequest, internalError } from '../helpers/http-helper';
-import MissingParamError from '../protocols/errors/missing-param-error';
+import MissingParamError from '../errors/missing-param-error';
 import { HttpRequest, HttpResponse } from '../protocols/http';
 
 /* eslint-disable class-methods-use-this */

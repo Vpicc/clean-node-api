@@ -7,7 +7,7 @@ import { HttpRequest, HttpResponse } from '../protocols/http';
 /* eslint-disable class-methods-use-this */
 export default class SignUpController {
   handle(httpRequest : HttpRequest): HttpResponse {
-    const requiredFields = ['name', 'email'];
+    const requiredFields = ['name', 'email', 'password'];
     for (let i = 0; i < requiredFields.length; i += 1) {
       if (!httpRequest.body[requiredFields[i]]) {
         return badRequest(new MissingParamError(requiredFields[i]));

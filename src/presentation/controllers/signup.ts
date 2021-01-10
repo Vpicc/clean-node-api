@@ -1,9 +1,10 @@
 import { badRequest, internalError } from '../helpers/http-helper';
 import MissingParamError from '../errors/missing-param-error';
 import { HttpRequest, HttpResponse } from '../protocols/http';
+import Controller from '../protocols/controller';
 
 /* eslint-disable class-methods-use-this */
-export default class SignUpController {
+export default class SignUpController implements Controller {
   handle(httpRequest : HttpRequest): HttpResponse {
     const requiredFields = ['name', 'email', 'password', 'passwordConfirmation'];
     for (let i = 0; i < requiredFields.length; i += 1) {

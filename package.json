@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --watch",
-    "test:staged": "jest"
+    "test": "jest --watch --runInBand",
+    "test:staged": "jest --passWithNoTests --runInBand"
   },
   "repository": {
     "type": "git",

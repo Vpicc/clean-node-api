@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/Vpicc/clean-node-api#readme",
   "devDependencies": {
-    "git-commit-msg-linter": "^3.0.0"
+    "@types/node": "^14.14.20",
+    "git-commit-msg-linter": "^3.0.0",
+    "typescript": "^4.1.3"
   }
 }

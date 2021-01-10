@@ -1,26 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
+import { badRequest, internalError } from '../helpers/http-helper';
+import MissingParamError from '../protocols/errors/missing-param-error';
 import { HttpRequest, HttpResponse } from '../protocols/http';
 
 /* eslint-disable class-methods-use-this */
 export default class SignUpController {
   handle(httpRequest : HttpRequest): HttpResponse {
     if (!httpRequest.body.name) {
-      return {
-        statusCode: 400,
-        body: new Error('Missing param: name'),
-      };
+      return badRequest(new MissingParamError('name'));
     }
 
     if (!httpRequest.body.email) {
-      return {
-        statusCode: 400,
-        body: new Error('Missing param: email'),
-      };
+      return badRequest(new MissingParamError('email'));
     }
-    return {
-      statusCode: 500,
-      body: new Error('Internal error'),
-    };
+    return internalError(new Error('Internal server error'));
   }
 }

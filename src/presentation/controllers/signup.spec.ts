@@ -1,12 +1,33 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable class-methods-use-this */
+import InvalidParamError from '../errors/invalid-param-error';
 import MissingParamError from '../errors/missing-param-error';
+import EmailValidator from '../protocols/email-validator';
 import SignUpController from './signup';
 
-const makeSut = (): SignUpController => new SignUpController();
+interface SutTypes {
+  sut: SignUpController,
+  emailValidatorStub: EmailValidator,
+}
+
+const makeSut = (): SutTypes => {
+  class EmailValidatorStub implements EmailValidator {
+    isValid(_email: string): boolean {
+      return true;
+    }
+  }
+  const emailValidatorStub = new EmailValidatorStub();
+  const sut = new SignUpController(emailValidatorStub);
+  return {
+    sut,
+    emailValidatorStub,
+  };
+};
 
 describe('', () => {
   test('should return 400 if no name is provided', () => {
     // sut - System under test
-    const sut = makeSut();
+    const { sut } = makeSut();
     const httpRequest = {
       body: {
         email: 'any_email@mail.com',
@@ -20,7 +41,7 @@ describe('', () => {
   });
   test('should return 400 if no email is provided', () => {
     // sut - System under test
-    const sut = makeSut();
+    const { sut } = makeSut();
     const httpRequest = {
       body: {
         name: 'any_name',
@@ -35,7 +56,7 @@ describe('', () => {
 
   test('should return 400 if no email is provided', () => {
     // sut - System under test
-    const sut = makeSut();
+    const { sut } = makeSut();
     const httpRequest = {
       body: {
         name: 'any_name',
@@ -47,9 +68,9 @@ describe('', () => {
     expect(httpResponse.statusCode).toBe(400);
     expect(httpResponse.body).toEqual(new MissingParamError('password'));
   });
-  test('should return 400 if no email is provided', () => {
+  test('should return 400 if no passwordConfirmation is provided', () => {
     // sut - System under test
-    const sut = makeSut();
+    const { sut } = makeSut();
     const httpRequest = {
       body: {
         name: 'any_name',
@@ -60,5 +81,22 @@ describe('', () => {
     const httpResponse = sut.handle(httpRequest);
     expect(httpResponse.statusCode).toBe(400);
     expect(httpResponse.body).toEqual(new MissingParamError('passwordConfirmation'));
+  });
+
+  test('should return 400 if invalid email is provided', () => {
+    // sut - System under test
+    const { sut, emailValidatorStub } = makeSut();
+    jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false);
+    const httpRequest = {
+      body: {
+        name: 'any_name',
+        email: 'invalid_email@mail.com',
+        password: 'any_password',
+        passwordConfirmation: 'any_password',
+      },
+    };
+    const httpResponse = sut.handle(httpRequest);
+    expect(httpResponse.statusCode).toBe(400);
+    expect(httpResponse.body).toEqual(new InvalidParamError('email'));
   });
 });

@@ -1,4 +1,4 @@
-import { badRequest, internalError } from '../helpers/http-helper';
+import { badRequest, serverError } from '../helpers/http-helper';
 import MissingParamError from '../errors/missing-param-error';
 import { HttpRequest, HttpResponse } from '../protocols/http';
 import Controller from '../protocols/controller';
@@ -26,9 +26,9 @@ export default class SignUpController implements Controller {
       if (!emailIsValid) {
         return badRequest(new InvalidParamError('email'));
       }
-      return internalError(new Error('Internal server error'));
+      return serverError(new Error('Internal server error'));
     } catch (error) {
-      return internalError(new ServerError());
+      return serverError(new ServerError());
     }
   }
 }

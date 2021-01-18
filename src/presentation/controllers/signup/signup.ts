@@ -1,9 +1,8 @@
-import { badRequest, serverError } from '../helpers/http-helper';
-import { InvalidParamError, MissingParamError } from '../errors';
+import { badRequest, serverError } from '../../helpers/http-helper';
+import { InvalidParamError, MissingParamError } from '../../errors';
 import {
-  Controller, EmailValidator, HttpRequest, HttpResponse,
-} from '../protocols';
-import { AddAccount } from '../../domain/usecases/add-account';
+  Controller, EmailValidator, AddAccount, HttpRequest, HttpResponse,
+} from './signup-protocols';
 
 /* eslint-disable class-methods-use-this */
 export default class SignUpController implements Controller {

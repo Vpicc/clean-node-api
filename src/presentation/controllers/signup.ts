@@ -4,7 +4,6 @@ import { HttpRequest, HttpResponse } from '../protocols/http';
 import Controller from '../protocols/controller';
 import EmailValidator from '../protocols/email-validator';
 import InvalidParamError from '../errors/invalid-param-error';
-import ServerError from '../errors/server-error';
 
 /* eslint-disable class-methods-use-this */
 export default class SignUpController implements Controller {
@@ -26,9 +25,9 @@ export default class SignUpController implements Controller {
       if (!emailIsValid) {
         return badRequest(new InvalidParamError('email'));
       }
-      return serverError(new Error('Internal server error'));
+      return serverError();
     } catch (error) {
-      return serverError(new ServerError());
+      return serverError();
     }
   }
 }

@@ -1,9 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable class-methods-use-this */
+import validator from 'validator';
 import EmailValidator from '../presentation/protocols/email-validator';
 
 export default class EmailValidatorAdapter implements EmailValidator {
   isValid(email: string) : boolean {
-    return false;
+    return validator.isEmail(email);
   }
 }

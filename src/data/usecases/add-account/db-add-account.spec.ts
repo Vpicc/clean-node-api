@@ -1,5 +1,9 @@
+/* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
+  AccountModel,
+  AddAccountModel,
+  AddAccountRepository,
   Encrypter,
 } from './db-add-account-protocols';
 
@@ -13,14 +17,32 @@ const makeEncrypter = (): Encrypter => {
   }
   return new EncrypterStub();
 };
+
+const makeAccountRepository = (): AddAccountRepository => {
+  class AddAccountRepositoryStub implements AddAccountRepository {
+    async add(account: AddAccountModel): Promise<AccountModel> {
+      const fakeAccount = {
+        id: 'valid_id',
+        name: 'valid_name',
+        email: 'valid_email',
+        password: 'hashed_password',
+      };
+      return fakeAccount;
+    }
+  }
+  return new AddAccountRepositoryStub();
+};
+
 interface SutTypes {
   encrypterStub: Encrypter,
+  addAccountRepositoryStub: AddAccountRepository,
   sut: DbAddAccount,
 }
 const makeSut = (): SutTypes => {
   const encrypterStub = makeEncrypter();
-  const sut = new DbAddAccount(encrypterStub);
-  return { sut, encrypterStub };
+  const addAccountRepositoryStub = makeAccountRepository();
+  const sut = new DbAddAccount(encrypterStub, addAccountRepositoryStub);
+  return { sut, encrypterStub, addAccountRepositoryStub };
 };
 
 describe('DbAddAccount Usecase', () => {
@@ -45,5 +67,20 @@ describe('DbAddAccount Usecase', () => {
     };
     const promise = sut.add(accountData);
     await expect(promise).rejects.toThrow();
+  });
+  test('should call AddAccountRepository with correct values', async () => {
+    const { sut, addAccountRepositoryStub } = makeSut();
+    const addSpy = jest.spyOn(addAccountRepositoryStub, 'add');
+    const accountData = {
+      name: 'valid_name',
+      email: 'valid_email',
+      password: 'valid_password',
+    };
+    await sut.add(accountData);
+    expect(addSpy).toHaveBeenCalledWith({
+      name: 'valid_name',
+      email: 'valid_email',
+      password: 'hashed_password',
+    });
   });
 });

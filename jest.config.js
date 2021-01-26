@@ -141,6 +141,8 @@ module.exports = {
   // The test environment that will be used for testing
   testEnvironment: 'node',
 
+  preset: '@shelf/jest-mongodb',
+
   // Options that will be passed to the testEnvironment
   // testEnvironmentOptions: {},
 

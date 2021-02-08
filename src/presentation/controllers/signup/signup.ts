@@ -1,7 +1,7 @@
 import { badRequest, ok, serverError } from '../../helpers/http-helper';
 import { InvalidParamError, MissingParamError } from '../../errors';
 import {
-  Controller, EmailValidator, AddAccount, HttpRequest, HttpResponse,
+  Controller, EmailValidator, AddAccount, HttpRequest, HttpResponse, Validation,
 } from './signup-protocols';
 
 /* eslint-disable class-methods-use-this */
@@ -10,13 +10,17 @@ export default class SignUpController implements Controller {
 
   private readonly addAccount: AddAccount;
 
-  constructor(emailValidator: EmailValidator, addAccount: AddAccount) {
+  private readonly validation: Validation;
+
+  constructor(emailValidator: EmailValidator, addAccount: AddAccount, validation: Validation) {
     this.emailValidator = emailValidator;
     this.addAccount = addAccount;
+    this.validation = validation;
   }
 
   async handle(httpRequest : HttpRequest): Promise<HttpResponse> {
     try {
+      this.validation.validate(httpRequest.body);
       const requiredFields = ['name', 'email', 'password', 'passwordConfirmation'];
       for (let i = 0; i < requiredFields.length; i += 1) {
         if (!httpRequest.body[requiredFields[i]]) {

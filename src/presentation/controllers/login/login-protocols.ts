@@ -1,6 +1,6 @@
-import EmailValidator from '../../protocols/email-validator';
 import Authentication from '../../../domain/usecases/authentication';
+import Validation from '../../helpers/validators/validation';
 
 export * from '../../protocols';
 export * from '../../../domain/models/account';
-export { EmailValidator, Authentication };
+export { Authentication, Validation };

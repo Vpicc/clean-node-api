@@ -2,11 +2,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable class-methods-use-this */
 import { InvalidParamError, MissingParamError, ServerError } from '../../errors';
-import { badRequest, ok, serverError } from '../../helpers/http-helper';
+import { badRequest, ok, serverError } from '../../helpers/http/http-helper';
 import { HttpRequest } from '../../protocols';
 import SignUpController from './signup';
 import {
-  EmailValidator, AccountModel, AddAccount, AddAccountModel, Validation,
+  AccountModel, AddAccount, AddAccountModel, Validation,
 } from './signup-protocols';
 
 const makeFakeAccount = (): AccountModel => ({

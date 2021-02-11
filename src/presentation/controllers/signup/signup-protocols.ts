@@ -1,4 +1,4 @@
-import Validation from '../../helpers/validators/validation';
+import Validation from '../../protocols/validation';
 
 export * from '../../protocols';
 export * from '../../../domain/usecases/add-account';

@@ -1,5 +1,5 @@
 import Authentication from '../../../domain/usecases/authentication';
-import Validation from '../../helpers/validators/validation';
+import Validation from '../../protocols/validation';
 
 export * from '../../protocols';
 export * from '../../../domain/models/account';

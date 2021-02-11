@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Validation } from '../../controllers/signup/signup-protocols';
-import { MissingParamError } from '../../errors';
+import { InvalidParamError, MissingParamError } from '../../errors';
 
 import ValidationComposite from './validation-composite';
 
@@ -15,19 +15,27 @@ const makeValidationStub = () : Validation => {
 
 interface SutTypes {
   sut: ValidationComposite,
-  validationStub: Validation,
+  validationStubs: Validation[],
 }
 
 const makeSut = (): SutTypes => {
-  const validationStub = makeValidationStub();
-  const sut = new ValidationComposite([validationStub]);
-  return { sut, validationStub };
+  const validationStubs = [makeValidationStub(), makeValidationStub()];
+  const sut = new ValidationComposite(validationStubs);
+  return { sut, validationStubs };
 };
 describe('ValidationComposite', () => {
   test('should return an error if any validation fails', () => {
-    const { sut, validationStub } = makeSut();
-    jest.spyOn(validationStub, 'validate').mockReturnValueOnce(new MissingParamError('field'));
+    const { sut, validationStubs } = makeSut();
+    jest.spyOn(validationStubs[1], 'validate').mockReturnValueOnce(new MissingParamError('field'));
     const response = sut.validate({ name: 'any_name' });
     expect(response).toEqual(new MissingParamError('field'));
+  });
+
+  test('should return the first error if more than one validation fails', () => {
+    const { sut, validationStubs } = makeSut();
+    jest.spyOn(validationStubs[0], 'validate').mockReturnValueOnce(new InvalidParamError('field'));
+    jest.spyOn(validationStubs[1], 'validate').mockReturnValueOnce(new MissingParamError('field2'));
+    const response = sut.validate({ name: 'any_name' });
+    expect(response).toEqual(new InvalidParamError('field'));
   });
 });

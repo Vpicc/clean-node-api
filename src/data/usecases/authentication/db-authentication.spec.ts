@@ -120,4 +120,10 @@ describe('DbAuthentication Usecase', () => {
     const response = sut.auth(makeFakeAuthenticationModel());
     await expect(response).rejects.toThrow();
   });
+
+  test('should return token on success', async () => {
+    const { sut } = makeSut();
+    const response = await sut.auth(makeFakeAuthenticationModel());
+    await expect(response).toBe('any_token');
+  });
 });

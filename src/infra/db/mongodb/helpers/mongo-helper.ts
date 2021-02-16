@@ -24,7 +24,10 @@ const MongoHelper = {
   },
 
   map: (collection: any): any => {
-  // eslint-disable-next-line @typescript-eslint/naming-convention
+    if (collection === null) {
+      return null;
+    }
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     const { _id, ...collectionWithoutId } = collection;
     return { ...collectionWithoutId, id: _id };
   },

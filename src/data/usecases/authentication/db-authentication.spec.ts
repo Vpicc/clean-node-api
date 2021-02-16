@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { AccountModel } from '../../../domain/models/account';
 import { HashComparer } from '../../protocols/criptography/hash-comparer';
+import TokenGenerator from '../../protocols/criptography/token-generator';
 import LoadAccountByEmailRepository from '../../protocols/db/load-account-by-email-repository';
 import DbAuthentication from './db-authentication';
 
@@ -30,6 +31,15 @@ const makeHashComparer = () : HashComparer => {
   return new HashComparerStub();
 };
 
+const makeTokenGenerator = () : TokenGenerator => {
+  class TokenGeneratorStub implements TokenGenerator {
+    async generate(id: string): Promise<string> {
+      return Promise.resolve('any_token');
+    }
+  }
+  return new TokenGeneratorStub();
+};
+
 const makeFakeAuthenticationModel = () => ({
   email: 'any_email@mail.com',
   password: 'any_password',
@@ -39,12 +49,20 @@ interface SutTypes {
   sut: DbAuthentication,
   loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository,
   hashComparerStub: HashComparer,
+  tokenGeneratorStub: TokenGenerator,
 }
 const makeSut = () => {
   const loadAccountByEmailRepositoryStub = makeLoadAccountByEmailRepository();
   const hashComparerStub = makeHashComparer();
-  const sut = new DbAuthentication(loadAccountByEmailRepositoryStub, hashComparerStub);
-  return { sut, loadAccountByEmailRepositoryStub, hashComparerStub };
+  const tokenGeneratorStub = makeTokenGenerator();
+  const sut = new DbAuthentication(
+    loadAccountByEmailRepositoryStub,
+    hashComparerStub,
+    tokenGeneratorStub,
+  );
+  return {
+    sut, loadAccountByEmailRepositoryStub, hashComparerStub, tokenGeneratorStub,
+  };
 };
 describe('DbAuthentication Usecase', () => {
   test('should call LoadAccountByEmailRepository with correct email', async () => {
@@ -87,5 +105,12 @@ describe('DbAuthentication Usecase', () => {
     jest.spyOn(hashComparerStub, 'compare').mockReturnValueOnce(Promise.resolve(false));
     const accessToken = await sut.auth(makeFakeAuthenticationModel());
     expect(accessToken).toBeNull();
+  });
+
+  test('should call TokenGenerator with correct id', async () => {
+    const { sut, tokenGeneratorStub } = makeSut();
+    const generateSpy = jest.spyOn(tokenGeneratorStub, 'generate');
+    await sut.auth(makeFakeAuthenticationModel());
+    expect(generateSpy).toHaveBeenCalledWith('any_id');
   });
 });

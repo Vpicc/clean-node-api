@@ -1,8 +1,8 @@
 import { AccountModel } from '../../../domain/models/account';
 import { AddAccount, AddAccountModel } from '../../../domain/usecases/add-account';
-import Encrypter from '../../protocols/criptography/encrypter';
+import Hasher from '../../protocols/criptography/hasher';
 import AddAccountRepository from '../../protocols/db/add-account-repository';
 
 export {
-  AccountModel, AddAccount, AddAccountModel, Encrypter, AddAccountRepository,
+  AccountModel, AddAccount, AddAccountModel, Hasher, AddAccountRepository,
 };

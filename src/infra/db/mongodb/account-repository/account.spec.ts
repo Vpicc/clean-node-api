@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { Collection } from 'mongodb';
 import MongoHelper from '../helpers/mongo-helper';
 import AccountMongoRepository from './account';
@@ -58,5 +59,16 @@ describe('Account Mongo Repository', () => {
     const { sut } = makeSut();
     const account = await sut.loadByEmail('any_email@mail.com');
     expect(account).toBeNull();
+  });
+
+  test('should update the account accessToken on updateAccessToken success', async () => {
+    const { sut } = makeSut();
+    const result = await accountCollection.insertOne(makeFakeAddAccountModel());
+    const response = result.ops[0];
+    expect(response.accessToken).toBeFalsy();
+    await sut.updateAccessToken(response._id, 'any_token');
+    const account = await accountCollection.findOne({ _id: response._id });
+    expect(account).toBeTruthy();
+    expect(account?.accessToken).toBe('any_token');
   });
 });

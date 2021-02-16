@@ -8,13 +8,13 @@ import {
 } from './db-authentication-protocols';
 
 export default class DbAuthentication implements Authentication {
-  private readonly loadAccountByEmailRepository;
+  private readonly loadAccountByEmailRepository : LoadAccountByEmailRepository;
 
-  private readonly hashComparer;
+  private readonly hashComparer : HashComparer;
 
-  private readonly encrypter;
+  private readonly encrypter : Encrypter;
 
-  private readonly updateAccessTokenRepository;
+  private readonly updateAccessTokenRepository : UpdateAccessTokenRepository;
 
   constructor(
     loadAccountByEmailRepository: LoadAccountByEmailRepository,
@@ -43,7 +43,7 @@ export default class DbAuthentication implements Authentication {
 
     const token = await this.encrypter.encrypt(account.id);
 
-    await this.updateAccessTokenRepository.update(account.id, token);
+    await this.updateAccessTokenRepository.updateAccessToken(account.id, token);
 
     return token;
   }

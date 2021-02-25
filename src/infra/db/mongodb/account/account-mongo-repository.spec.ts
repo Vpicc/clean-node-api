@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import { Collection } from 'mongodb';
 import MongoHelper from '../helpers/mongo-helper';
-import AccountMongoRepository from './account';
+import AccountMongoRepository from './account-mongo-repository';
 
 const makeFakeAddAccountModel = () => ({
   name: 'any_name',

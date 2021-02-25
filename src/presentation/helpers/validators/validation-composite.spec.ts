@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Validation } from '../../controllers/signup/signup-protocols';
+import { Validation } from '../../controllers/signup/signup-controller-protocols';
 import { InvalidParamError, MissingParamError } from '../../errors';
 
 import ValidationComposite from './validation-composite';

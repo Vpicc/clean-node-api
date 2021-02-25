@@ -3,7 +3,7 @@ import {
 } from '../../helpers/http/http-helper';
 import {
   Controller, Authentication, HttpRequest, HttpResponse, Validation,
-} from './login-protocols';
+} from './login-controller-protocols';
 
 export default class LoginController implements Controller {
   private readonly authentication;

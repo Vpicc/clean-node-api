@@ -4,9 +4,9 @@ import { InvalidParamError, MissingParamError } from '../../errors';
 import {
   badRequest, ok, serverError, unauthorized,
 } from '../../helpers/http/http-helper';
-import { HttpRequest, Authentication } from './login-protocols';
-import LoginController from './login';
-import { Validation } from '../signup/signup-protocols';
+import { HttpRequest, Authentication } from './login-controller-protocols';
+import LoginController from './login-controller';
+import { Validation } from '../signup/signup-controller-protocols';
 import { AuthenticationModel } from '../../../domain/usecases/authentication';
 
 const makeAuthentication = (): Authentication => {

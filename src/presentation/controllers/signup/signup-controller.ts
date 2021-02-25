@@ -1,7 +1,7 @@
 import { badRequest, ok, serverError } from '../../helpers/http/http-helper';
 import {
   Controller, AddAccount, HttpRequest, HttpResponse, Validation,
-} from './signup-protocols';
+} from './signup-controller-protocols';
 
 /* eslint-disable class-methods-use-this */
 export default class SignUpController implements Controller {

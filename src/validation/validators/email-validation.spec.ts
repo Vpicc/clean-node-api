@@ -1,9 +1,9 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable class-methods-use-this */
-import { InvalidParamError } from '../../errors';
-import { HttpRequest } from '../../protocols';
-import EmailValidator from '../../protocols/email-validator';
+import { InvalidParamError } from '../../presentation/errors';
+import { HttpRequest } from '../../presentation/protocols';
+import EmailValidator from '../protocols/email-validator';
 import EmailValidation from './email-validation';
 
 const makeEmailValidator = (): EmailValidator => {

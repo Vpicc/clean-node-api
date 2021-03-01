@@ -1,6 +1,7 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable class-methods-use-this */
+import Authentication, { AuthenticationModel } from '../../../domain/usecases/authentication';
 import { InvalidParamError, MissingParamError, ServerError } from '../../errors';
 import { badRequest, ok, serverError } from '../../helpers/http/http-helper';
 import { HttpRequest } from '../../protocols';
@@ -26,6 +27,15 @@ const makeAddAccount = (): AddAccount => {
   return new AddAccountStub();
 };
 
+const makeAuthentication = (): Authentication => {
+  class AuthenticationStub implements Authentication {
+    async auth(authentication: AuthenticationModel): Promise<string | null> {
+      return 'any_token';
+    }
+  }
+  return new AuthenticationStub();
+};
+
 const makeValidation = (): Validation => {
   class ValidationStub implements Validation {
     validate(input: any): Error | null {
@@ -48,14 +58,16 @@ interface SutTypes {
   sut: SignUpController,
   addAccountStub: AddAccount,
   validationStub: Validation,
+  authenticationStub: Authentication,
 }
 const makeSut = (): SutTypes => {
   const addAccountStub = makeAddAccount();
   const validationStub = makeValidation();
-  const sut = new SignUpController(addAccountStub, validationStub);
+  const authenticationStub = makeAuthentication();
+  const sut = new SignUpController(addAccountStub, validationStub, authenticationStub);
   return {
     sut,
-
+    authenticationStub,
     addAccountStub,
     validationStub,
   };
@@ -103,5 +115,13 @@ describe('SignUpController', () => {
     const httpRequest = makeFakeRequest();
     const httpResponse = await sut.handle(httpRequest);
     expect(httpResponse).toEqual(badRequest(new MissingParamError('any_field')));
+  });
+
+  test('should call Authentication with correct values', async () => {
+    const { sut, authenticationStub } = makeSut();
+    const authSpy = jest.spyOn(authenticationStub, 'auth');
+    const httpRequest = makeFakeRequest();
+    await sut.handle(httpRequest);
+    expect(authSpy).toHaveBeenCalledWith({ email: 'any_email@mail.com', password: 'any_password' });
   });
 });

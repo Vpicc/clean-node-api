@@ -1,13 +1,13 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { InvalidParamError, MissingParamError } from '../../errors';
+import { MissingParamError } from '../../../errors';
 import {
   badRequest, ok, serverError, unauthorized,
-} from '../../helpers/http/http-helper';
+} from '../../../helpers/http/http-helper';
 import { HttpRequest, Authentication } from './login-controller-protocols';
 import LoginController from './login-controller';
 import { Validation } from '../signup/signup-controller-protocols';
-import { AuthenticationModel } from '../../../domain/usecases/authentication';
+import { AuthenticationModel } from '../../../../domain/usecases/authentication';
 
 const makeAuthentication = (): Authentication => {
   class AuthenticationStub implements Authentication {

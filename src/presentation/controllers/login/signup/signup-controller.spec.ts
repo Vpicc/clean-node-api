@@ -1,12 +1,12 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable class-methods-use-this */
-import Authentication, { AuthenticationModel } from '../../../domain/usecases/authentication';
-import { MissingParamError, ServerError, EmailInUseError } from '../../errors';
+import Authentication, { AuthenticationModel } from '../../../../domain/usecases/authentication';
+import { MissingParamError, ServerError, EmailInUseError } from '../../../errors';
 import {
   badRequest, ok, serverError, forbidden,
-} from '../../helpers/http/http-helper';
-import { HttpRequest } from '../../protocols';
+} from '../../../helpers/http/http-helper';
+import { HttpRequest } from '../../../protocols';
 import SignUpController from './signup-controller';
 import {
   AccountModel, AddAccount, AddAccountModel, Validation,

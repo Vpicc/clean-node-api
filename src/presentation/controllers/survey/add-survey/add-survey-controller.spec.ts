@@ -1,7 +1,9 @@
+/* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Validation } from '../../../protocols';
 import AddSurveyController from './add-survey-controller';
-import { Controller, HttpRequest } from './add-survey-controller-protocols';
+import {
+  Controller, HttpRequest, Validation, AddSurveyModel, AddSurvey,
+} from './add-survey-controller-protocols';
 import { badRequest } from '../../../helpers/http/http-helper';
 
 const makeFakeSurvey = () => (
@@ -21,7 +23,17 @@ const makeFakeRequest = (): HttpRequest => ({
 interface SutTypes {
   sut: Controller,
   validationStub: Validation,
+  addSurveyStub: AddSurvey,
 }
+
+const makeAddSurveyStub = (): AddSurvey => {
+  class AddSurveyStub implements AddSurvey {
+    async add(data: AddSurveyModel): Promise<void> {
+      return Promise.resolve();
+    }
+  }
+  return new AddSurveyStub();
+};
 
 const makeValidationStub = () => {
   class ValidationStub implements Validation {
@@ -34,8 +46,9 @@ const makeValidationStub = () => {
 
 const makeSut = () : SutTypes => {
   const validationStub = makeValidationStub();
-  const sut = new AddSurveyController(validationStub);
-  return { sut, validationStub };
+  const addSurveyStub = makeAddSurveyStub();
+  const sut = new AddSurveyController(validationStub, addSurveyStub);
+  return { sut, validationStub, addSurveyStub };
 };
 
 describe('AddSurvey Controller', () => {
@@ -53,5 +66,13 @@ describe('AddSurvey Controller', () => {
     const httpRequest = makeFakeRequest();
     const httpResponse = await sut.handle(httpRequest);
     expect(httpResponse).toEqual(badRequest(new Error()));
+  });
+
+  test('should call AddSurvey with correct values', async () => {
+    const { sut, addSurveyStub } = makeSut();
+    const addSpy = jest.spyOn(addSurveyStub, 'add');
+    const httpRequest = makeFakeRequest();
+    await sut.handle(httpRequest);
+    expect(addSpy).toHaveBeenCalledWith(makeFakeSurvey());
   });
 });

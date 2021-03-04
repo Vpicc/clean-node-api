@@ -1,4 +1,4 @@
-import { badRequest, serverError } from '../../../helpers/http/http-helper';
+import { badRequest, noContent, serverError } from '../../../helpers/http/http-helper';
 import {
   Controller, HttpRequest, HttpResponse, Validation, AddSurvey,
 } from './add-survey-controller-protocols';
@@ -22,7 +22,7 @@ export default class AddSurveyController implements Controller {
         answers,
       });
 
-      return await Promise.resolve({} as HttpResponse);
+      return noContent();
     } catch (e) {
       console.error(e);
       return serverError(e);

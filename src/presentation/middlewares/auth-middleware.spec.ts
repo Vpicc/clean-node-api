@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { HttpRequest } from '../protocols';
-import { forbidden } from '../helpers/http/http-helper';
+import { forbidden, ok } from '../helpers/http/http-helper';
 import { AccessDeniedError } from '../errors';
 import { LoadAccountByToken } from '../../domain/usecases/load-account-by-token';
 import AuthMiddleware from './auth-middleware';
@@ -55,8 +55,15 @@ describe('Auth Middleware', () => {
 
   test('should return 403 if LoadAccountByToken returns null', async () => {
     const { sut, loadAccountByTokenStub } = makeSut();
-    const loadSpy = jest.spyOn(loadAccountByTokenStub, 'load').mockReturnValueOnce(Promise.resolve(null));
+    jest.spyOn(loadAccountByTokenStub, 'load').mockReturnValueOnce(Promise.resolve(null));
     const httpResponse = await sut.handle(makeFakeRequest());
     expect(httpResponse).toEqual(forbidden(new AccessDeniedError()));
+  });
+
+  test('should return 200 if LoadAccountByToken returns an account', async () => {
+    const { sut, loadAccountByTokenStub } = makeSut();
+    jest.spyOn(loadAccountByTokenStub, 'load');
+    const httpResponse = await sut.handle(makeFakeRequest());
+    expect(httpResponse).toEqual(ok({ accountId: 'any_id' }));
   });
 });

@@ -14,7 +14,7 @@ export default class DbLoadAccountByToken implements LoadAccountByToken {
     if (!token) {
       return null;
     }
-    await this.loadAccountByTokenRepository.loadByToken(token, role);
-    return Promise.resolve(null);
+    const account = await this.loadAccountByTokenRepository.loadByToken(token, role);
+    return account;
   }
 }

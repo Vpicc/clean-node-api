@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { HttpRequest } from '../protocols';
 import { forbidden, ok, serverError } from '../helpers/http/http-helper';
 import { AccessDeniedError } from '../errors';
-import { LoadAccountByToken } from '../../domain/usecases/load-account-by-token';
 import AuthMiddleware from './auth-middleware';
-import { AccountModel } from '../../domain/models/account';
+import {
+  LoadAccountByToken, HttpRequest, AccountModel,
+} from './auth-middleware-protocols';
 
 const makeFakeAccount = () => ({
   id: 'any_id',

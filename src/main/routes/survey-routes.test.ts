@@ -30,11 +30,11 @@ describe('Survey Routes', () => {
     await surveyCollection.deleteMany({});
   });
   describe('POST /surveys', () => {
-    test('should return 200 on signup', async () => {
+    test('should return 403 on add survey without accessToken', async () => {
       await request(app)
         .post('/api/surveys')
         .send(makeFakeSurvey())
-        .expect(204);
+        .expect(403);
     });
   });
 });

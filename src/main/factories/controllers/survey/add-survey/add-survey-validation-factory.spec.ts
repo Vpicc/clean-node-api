@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import Validation from '../../../../presentation/protocols/validation';
-import { EmailValidation, ValidationComposite, RequiredFieldValidation } from '../../../../validation/validators';
+import Validation from '../../../../../presentation/protocols/validation';
+import { EmailValidation, ValidationComposite, RequiredFieldValidation } from '../../../../../validation/validators';
 import makeAddSurveyValidation from './add-survey-validation-factory';
 
-jest.mock('../../../../validation/validators/validation-composite');
+jest.mock('../../../../../validation/validators/validation-composite');
 
 describe('AddSurveyValidation factory', () => {
   test('should call ValidationComposite with all validations', () => {
